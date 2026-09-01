@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      # O runner do GitHub Actions ja tem Docker disponivel,
+      # entao o Testcontainers sobe o PostgreSQL sem configuracao extra.
+      #
+      # ./mvnw e nao mvn: o wrapper fixa a versao do Maven, entao a CI roda
+      # exatamente a mesma que a maquina do desenvolvedor.
+      - name: Build e testes
+        run: ./mvnw -B clean verify
