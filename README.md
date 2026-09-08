@@ -14,7 +14,7 @@ API de movimentação de saldo com notificação assíncrona e confiável via we
 
 Sistemas que movimentam dinheiro enfrentam dois problemas que raramente aparecem em exemplos didáticos:
 
-**1. A mesma operação pode chegar mais de uma vez.** Timeout de rede, retry automático do cliente ou redelivery de uma fila fazem a mesma requisição bater duas vezes no servidor. Se o serviço não for idempotente, o débito acontece em dobro — e isso é dinheiro real desaparecendo.
+**1. A mesma operação pode chegar mais de uma vez.** Timeout de rede, retry automático do cliente ou redelivery de uma fila fazem a mesma requisição bater duas vezes no servidor. Se o serviço não for idempotente, o débito acontece em dobro, o que faz com que operações duplicadas gerem prejuízo.
 
 **2. Alterar o banco e publicar um evento não são atômicos.** O commit no banco e o envio para a fila são operações independentes, sem transação compartilhada. Se o processo morrer entre as duas, o saldo mudou e ninguém foi notificado. A falha é silenciosa: nenhum erro é registrado, o sistema simplesmente fica inconsistente.
 
