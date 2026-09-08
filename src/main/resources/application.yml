@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: ledger-service
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ledger}
+    username: ${SPRING_DATASOURCE_USERNAME:ledger}
+    password: ${SPRING_DATASOURCE_PASSWORD:ledger}
+
+  jpa:
+    # O schema e responsabilidade exclusiva do Flyway.
+    # 'validate' garante que a aplicacao nao sobe se o mapeamento divergir do banco.
+    hibernate:
+      ddl-auto: validate
+    # Desliga o anti-pattern Open Session In View: a sessao nao vaza para a camada web.
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  jackson:
+    default-property-inclusion: non_null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.luanleal.ledger: INFO
